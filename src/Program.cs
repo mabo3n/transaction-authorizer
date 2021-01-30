@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nu
+namespace Authorizer
 {
     class Program
     {

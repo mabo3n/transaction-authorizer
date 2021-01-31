@@ -9,5 +9,7 @@ namespace Authorizer.Domain.Repositories
         public IEnumerable<Transaction> QueryByTimeWindow(
             DateTime from, DateTime to
         );
+
+        public void Save(Transaction transaction);
     }
 }

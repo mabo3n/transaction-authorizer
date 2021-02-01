@@ -1,13 +1,24 @@
 ﻿using System;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Authorizer
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            var jointArgs = string.Join(',', args);
-            Console.WriteLine($"Hello World {jointArgs}!");
+            Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging => {
+                    logging
+                        .ClearProviders();
+                })
+                .ConfigureServices((hostContext, services) => {
+                    services
+                        .AddHostedService<ConsoleService>();
+                })
+                .RunConsoleAsync();
         }
     }
 }

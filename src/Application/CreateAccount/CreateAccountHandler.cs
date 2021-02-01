@@ -1,9 +1,20 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace Authorizer.Application
 {
     public class CreateAccountHandler
-        : IOperationHandler<CreateAccount>
+        : IOperationHandler<AuthorizeTransaction>
     {
-        public OperationOutput Handle(CreateAccount operation)
+        public CreateAccountHandler()
+        {
+
+        }
+
+        public Task<OperationResult> Handle(
+            AuthorizeTransaction operation,
+            CancellationToken cancellationToken
+        )
         {
             throw new System.NotImplementedException();
         }

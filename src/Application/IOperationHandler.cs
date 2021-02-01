@@ -1,10 +1,9 @@
+using MediatR;
+
 namespace Authorizer.Application
 {
-    public abstract class Operation { }
-
-    public interface IOperationHandler<T>
+    public interface IOperationHandler<T> :
+        IRequestHandler<T, OperationResult>
         where T : Operation
-    {
-        public OperationOutput Handle(T operation);
-    }
+    { }
 }

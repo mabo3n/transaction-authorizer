@@ -1,14 +1,14 @@
-using Authorizer.Domain.Entities;
+using System;
 
 namespace Authorizer.Application
 {
     public class AuthorizeTransaction : Operation
     {
-        public Transaction Transaction { get; }
+        public string Merchant { get; set; }
+        public int Amount { get; set;}
+        public DateTime Time { get; set; }
 
-        public AuthorizeTransaction(Transaction transaction)
-        {
-            Transaction = transaction;
-        }
+        public AuthorizeTransaction() { }
     }
 }
+

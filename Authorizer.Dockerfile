@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/sdk:3.1 as build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal as build
 WORKDIR /app
 COPY . .
 RUN dotnet publish src/Authorizer.csproj -c Release -o ./publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:3.1 as release
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 as release
 WORKDIR /app
 COPY --from=build /app/publish/ .
 EXPOSE 80

@@ -11,14 +11,17 @@ namespace Authorizer.Application
     public class AuthorizeTransactionHandler
         : IRequestHandler<AuthorizeTransaction, OperationResult>
     {
+        private readonly IAccountRepository accountRepository;
         private readonly ITransactionRepository transactionRepository;
         private readonly ITransactionService transactionService;
 
         public AuthorizeTransactionHandler(
+            IAccountRepository accountRepository,
             ITransactionRepository transactionRepository,
             ITransactionService transactionService
         )
         {
+            this.accountRepository = accountRepository;
             this.transactionRepository = transactionRepository;
             this.transactionService = transactionService;
         }

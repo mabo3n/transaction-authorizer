@@ -28,10 +28,10 @@ namespace Authorizer.Application
             CancellationToken cancellationToken
         )
         {
-            var op = new OperationResult() {
-                Account = new Account(payload.Amount, true),
-                Violations = new Violation[] { }
-            };
+            var op = new OperationResult(
+                account: new Account(payload.Amount, true),
+                violations: new Violation[] { }
+            );
 
             return Task.FromResult(op);
         }

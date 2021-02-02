@@ -53,8 +53,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(someTransaction);
 
             violations
-                .Should()
-                .BeEmpty();
+                .Should().BeEmpty();
         }
 
         [Fact]
@@ -69,8 +68,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(someTransaction);
 
             violations
-                .Should()
-                .HaveCount(1)
+                .Should().HaveCount(1)
                 .And
                 .Contain(Violation.AccountNotInitialized);
         }
@@ -87,8 +85,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(someTransaction);
 
             violations
-                .Should()
-                .HaveCount(1)
+                .Should().HaveCount(1)
                 .And
                 .Contain(Violation.CardNotActive);
         }
@@ -107,8 +104,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(transaction);
 
             violations
-                .Should()
-                .HaveCount(1)
+                .Should().HaveCount(1)
                 .And
                 .Contain(Violation.CardNotActive);
         }
@@ -139,8 +135,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(transaction);
 
             violations
-                .Should()
-                .HaveCount(1)
+                .Should().HaveCount(1)
                 .And
                 .Contain(Violation.HighFrequencySmallInterval);
         }
@@ -176,8 +171,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(doubledTransaction);
 
             violations
-                .Should()
-                .HaveCount(1)
+                .Should().HaveCount(1)
                 .And
                 .Contain(Violation.DoubledTransaction);
         }
@@ -213,8 +207,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(transaction);
 
             violations
-                .Should()
-                .BeEmpty();
+                .Should().BeEmpty();
         }
 
         [Fact]
@@ -248,8 +241,7 @@ namespace AuthorizerTests.Domain.Services
             var violations = service.Authorize(transaction);
 
             violations
-                .Should()
-                .HaveCount(3)
+                .Should().HaveCount(3)
                 .And
                 .BeEquivalentTo(new[] {
                     Violation.DoubledTransaction,

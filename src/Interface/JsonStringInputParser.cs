@@ -15,7 +15,7 @@ namespace Authorizer.Interface
                 ["transaction"] = typeof(AuthorizeTransaction),
             };
 
-        private static JsonSerializerOptions ParseOptions
+        private static JsonSerializerOptions parseOptions
             = new JsonSerializerOptions
             {
                 // PropertyNameCaseInsensitive = true,

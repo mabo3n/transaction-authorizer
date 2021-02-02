@@ -21,6 +21,7 @@ namespace Authorizer
 
                     services.AddMediatR(typeof(Program).Assembly);
                     services.AddScoped<IInputParser<string>, JsonStringInputParser>();
+                    services.AddScoped<IAccountRepository, AccountRepository>();
                     services.AddScoped<ITransactionRepository, TransactionRepository>();
                     services.AddScoped<ITransactionService, TransactionService>();
                 })

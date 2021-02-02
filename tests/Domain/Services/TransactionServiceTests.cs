@@ -15,14 +15,14 @@ namespace AuthorizerTests.Domain.Services
     {
         private InMemoryDataSource dataSource;
         private TransactionRepository transactionRepository;
-        private TransactionService transactionService;
+        private TransactionService service;
         private Random random = new Random(Seed: 12345);
 
         public TransactionServiceTests()
         {
             dataSource = new InMemoryDataSource();
             transactionRepository =  new TransactionRepository(dataSource);
-            transactionService = new TransactionService(transactionRepository);
+            service = new TransactionService(transactionRepository);
         }
 
         private void GenerateRandomTransactions(
@@ -50,7 +50,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 200, time: 05.February(2021)
             );
 
-            var violations = transactionService.Authorize(someTransaction);
+            var violations = service.Authorize(someTransaction);
 
             violations
                 .Should()
@@ -66,7 +66,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 200, time: 05.February(2021)
             );
 
-            var violations = transactionService.Authorize(someTransaction);
+            var violations = service.Authorize(someTransaction);
 
             violations
                 .Should()
@@ -84,7 +84,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 50, time: 05.February(2021)
             );
 
-            var violations = transactionService.Authorize(someTransaction);
+            var violations = service.Authorize(someTransaction);
 
             violations
                 .Should()
@@ -104,7 +104,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 420, time: 05.February(2021)
             );
 
-            var violations = transactionService.Authorize(transaction);
+            var violations = service.Authorize(transaction);
 
             violations
                 .Should()
@@ -136,7 +136,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 10, time: now
             );
 
-            var violations = transactionService.Authorize(transaction);
+            var violations = service.Authorize(transaction);
 
             violations
                 .Should()
@@ -173,7 +173,7 @@ namespace AuthorizerTests.Domain.Services
 
             var doubledTransaction = new Transaction(merchant, amount, time: now);
 
-            var violations = transactionService.Authorize(doubledTransaction);
+            var violations = service.Authorize(doubledTransaction);
 
             violations
                 .Should()
@@ -210,7 +210,7 @@ namespace AuthorizerTests.Domain.Services
 
             var transaction = new Transaction(merchant, amount, time: now);
 
-            var violations = transactionService.Authorize(transaction);
+            var violations = service.Authorize(transaction);
 
             violations
                 .Should()
@@ -245,7 +245,7 @@ namespace AuthorizerTests.Domain.Services
 
             var transaction = new Transaction(merchant, amount, time: now);
 
-            var violations = transactionService.Authorize(transaction);
+            var violations = service.Authorize(transaction);
 
             violations
                 .Should()

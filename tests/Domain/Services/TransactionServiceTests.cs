@@ -248,5 +248,41 @@ namespace AuthorizerTests.Domain.Services
                     Violation.InsufficientLimit,
                 });
         }
+
+        [Fact]
+        public void Apply_ShouldReturnNewAccount_WithUpdatedLimit()
+        {
+            dataSource.Account = new Account(availableLimit: 100, activeCard: true);
+
+            var someTransaction = new Transaction(
+                merchant: "Some merchant", amount: 25, time: 01.July(1998)
+            );
+
+            var violations = service.Authorize(someTransaction);
+
+            violations
+                .Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Apply_ShouldThrowException_WhenTransactionAmountExceedsAccountsAvailableLimit()
+        {
+            dataSource.Account = new Account(availableLimit: 100, activeCard: true);
+
+            var someTransaction = new Transaction(
+                merchant: "Some merchant", amount: 101, time: 01.July(1998)
+            );
+
+            var exception = Record.Exception(
+                () => service.Authorize(someTransaction)
+            );
+
+            exception
+                .Should()
+                .BeOfType<InvalidOperationException>()
+                .Which.Message
+                .Should()
+                .MatchEquivalentOf("*limit*");
+        }
     }
 }

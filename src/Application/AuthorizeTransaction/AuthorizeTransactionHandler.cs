@@ -1,18 +1,14 @@
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 
 namespace Authorizer.Application
 {
     public class AuthorizeTransactionHandler
-        : IOperationHandler<AuthorizeTransaction>
+        : IRequestHandler<AuthorizeTransaction, OperationResult>
     {
-        public AuthorizeTransactionHandler()
-        {
-
-        }
-
         public Task<OperationResult> Handle(
-            AuthorizeTransaction operation,
+            AuthorizeTransaction payload,
             CancellationToken cancellationToken
         )
         {

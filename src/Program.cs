@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+using Authorizer.Application;
 
 namespace Authorizer
 {
@@ -10,12 +12,12 @@ namespace Authorizer
         private static void Main(string[] args)
         {
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging => {
-                    logging
-                        .ClearProviders();
-                })
-                .ConfigureServices((hostContext, services) => {
+                // .ConfigureLogging(
+                //     logging => logging.ClearProviders()
+                // )
+                .ConfigureServices((hostService, services) => {
                     services
+                        .AddMediatR(typeof(Program).Assembly)
                         .AddHostedService<ConsoleService>();
                 })
                 .RunConsoleAsync();

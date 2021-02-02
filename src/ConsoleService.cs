@@ -2,18 +2,19 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Authorizer.Application;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using MediatR;
 
 namespace Authorizer
 {
     public class ConsoleService : IHostedService
     {
-        private ILogger<ConsoleService> Logger { get; }
+        private IMediator Mediator { get; }
 
-        public ConsoleService(ILogger<ConsoleService> logger)
+        public ConsoleService(IMediator mediator)
         {
-            Logger = logger;
+            Mediator = mediator;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -23,7 +24,17 @@ namespace Authorizer
                 var input = String.Empty;
                 while ((input = await stdinReader.ReadLineAsync()) != null)
                 {
-                    Console.WriteLine($"Input: {input}");
+                    Console.WriteLine($"Processing: {input}");
+                    try
+                    {
+                        var result = await Mediator.Send(new CreateAccount());
+                        Console.WriteLine("Done: " + result.Account.AvailableLimit);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An error ocurred: {ex.ToString()}");
+                        await StopAsync(cancellationToken);
+                    }
                 }
             }
         }

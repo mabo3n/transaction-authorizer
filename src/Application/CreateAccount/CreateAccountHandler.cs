@@ -1,22 +1,22 @@
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 
 namespace Authorizer.Application
 {
     public class CreateAccountHandler
-        : IOperationHandler<AuthorizeTransaction>
+        : IRequestHandler<CreateAccount, OperationResult>
     {
-        public CreateAccountHandler()
-        {
-
-        }
-
         public Task<OperationResult> Handle(
-            AuthorizeTransaction operation,
+            CreateAccount payload,
             CancellationToken cancellationToken
         )
         {
-            throw new System.NotImplementedException();
+            var op = new OperationResult() {
+                Account = new Authorizer.Domain.Entities.Account(123, true)
+            };
+
+            return Task.FromResult(op);
         }
     }
 }

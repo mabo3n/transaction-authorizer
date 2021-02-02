@@ -7,7 +7,7 @@ using Authorizer.Application;
 using Authorizer.Domain.Repositories;
 using System.Threading;
 
-namespace AuthorizerTests.Domain.Services
+namespace AuthorizerTests.Application
 {
     public class CreateAccountHandlerTests
     {

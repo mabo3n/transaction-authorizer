@@ -106,7 +106,7 @@ namespace AuthorizerTests.Domain.Services
             violations
                 .Should().HaveCount(1)
                 .And
-                .Contain(Violation.CardNotActive);
+                .Contain(Violation.InsufficientLimit);
         }
 
         [Fact]

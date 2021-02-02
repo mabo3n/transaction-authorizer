@@ -17,13 +17,18 @@ namespace Authorizer
                 //     logging => logging.ClearProviders()
                 // )
                 .ConfigureServices((hostService, services) => {
-                    services.AddHostedService<ConsoleService>();
-
-                    services.AddMediatR(typeof(Program).Assembly);
-                    services.AddScoped<IInputParser<string>, JsonStringInputParser>();
+                    // Infra
+                    services.AddScoped<IDataSource, InMemoryDataSource>();
                     services.AddScoped<IAccountRepository, AccountRepository>();
+
+                    // Application/Domain
                     services.AddScoped<ITransactionRepository, TransactionRepository>();
                     services.AddScoped<ITransactionService, TransactionService>();
+                    services.AddMediatR(typeof(Program).Assembly);
+
+                    // Api
+                    services.AddScoped<IInputParser<string>, JsonStringInputParser>();
+                    services.AddHostedService<ConsoleService>();
                 })
                 .RunConsoleAsync();
         }

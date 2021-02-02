@@ -12,13 +12,12 @@ namespace AuthorizerTests.Application
     public class CreateAccountHandlerTests
     {
         private InMemoryDataSource dataSource;
-        private IAccountRepository accountRepository;
         private CreateAccountHandler handler;
 
         public CreateAccountHandlerTests()
         {
             dataSource = new InMemoryDataSource();
-            accountRepository = new AccountRepository(dataSource);
+            IAccountRepository accountRepository = new AccountRepository(dataSource);
             handler = new CreateAccountHandler(accountRepository);
         }
 

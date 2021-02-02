@@ -3,7 +3,6 @@ using Xunit;
 using Authorizer.Infrastructure;
 using Authorizer.Domain.Enumerations;
 using Authorizer.Application;
-using Authorizer.Domain.Repositories;
 using Authorizer.Domain.Services;
 using System.Threading;
 using FluentAssertions.Extensions;
@@ -15,17 +14,14 @@ namespace AuthorizerTests.Application
     public class AuthorizeTransactionHandlerTests
     {
         private InMemoryDataSource dataSource;
-        private IAccountRepository accountRepository;
-        private ITransactionRepository transactionRepository;
-        private ITransactionService transactionService;
         private AuthorizeTransactionHandler handler;
 
         public AuthorizeTransactionHandlerTests()
         {
             dataSource = new InMemoryDataSource();
-            accountRepository = new AccountRepository(dataSource);
-            transactionRepository = new TransactionRepository(dataSource);
-            transactionService = new TransactionService(transactionRepository);
+            var accountRepository = new AccountRepository(dataSource);
+            var transactionRepository = new TransactionRepository(dataSource);
+            var transactionService = new TransactionService(transactionRepository);
             handler = new AuthorizeTransactionHandler(
                 accountRepository,
                 transactionRepository,
@@ -151,7 +147,7 @@ namespace AuthorizerTests.Application
             );
 
             var operation = new AuthorizeTransaction(
-                merchant: "Merchant ABC", amount: 100, time: 12.December(2012)
+                merchant: "Merchant DEF", amount: 100, time: 12.December(2012)
             );
 
             var result = await handler.Handle(operation, CancellationToken.None);
@@ -171,7 +167,7 @@ namespace AuthorizerTests.Application
             dataSource.Account = originalAccount;
 
             var operation = new AuthorizeTransaction(
-                merchant: "Merchant ABC", amount: 1000, time: 12.December(2012)
+                merchant: "Merchant DEF", amount: 1000, time: 12.December(2012)
             );
 
             await handler.Handle(operation, CancellationToken.None);
@@ -196,7 +192,7 @@ namespace AuthorizerTests.Application
             );
 
             var operation = new AuthorizeTransaction(
-                merchant: "Merchant ABC", amount: 100, time: 01.January(2080)
+                merchant: "Memerchant", amount: 100, time: 01.January(2080)
             );
 
             var result = await handler.Handle(operation, CancellationToken.None);

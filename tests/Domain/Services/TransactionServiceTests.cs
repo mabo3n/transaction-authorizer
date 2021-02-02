@@ -14,14 +14,13 @@ namespace AuthorizerTests.Domain.Services
     public class TransactionServiceTests
     {
         private InMemoryDataSource dataSource;
-        private TransactionRepository transactionRepository;
         private TransactionService service;
         private Random random = new Random(Seed: 12345);
 
         public TransactionServiceTests()
         {
             dataSource = new InMemoryDataSource();
-            transactionRepository =  new TransactionRepository(dataSource);
+            var transactionRepository =  new TransactionRepository(dataSource);
             service = new TransactionService(transactionRepository);
         }
 

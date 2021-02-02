@@ -18,10 +18,5 @@ namespace Authorizer.Domain.Services
         {
             yield break;
         }
-
-        public Account Apply(Transaction transaction)
-        {
-            return null;
-        }
     }
 }

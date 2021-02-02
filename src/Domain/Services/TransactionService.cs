@@ -7,7 +7,7 @@ namespace Authorizer.Domain.Services
 {
     public class TransactionService : ITransactionService
     {
-        private ITransactionRepository transactionRepository;
+        private readonly ITransactionRepository transactionRepository;
 
         public TransactionService(ITransactionRepository transactionRepository)
         {

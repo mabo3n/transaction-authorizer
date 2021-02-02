@@ -8,14 +8,14 @@ namespace Authorizer.Interface
 {
     public class JsonStringInputParser : IInputParser<string>
     {
-        private static IDictionary<string, Type> TypeMap
+        private static IDictionary<string, Type> typeMap
             = new Dictionary<string, Type>
             {
                 ["account"] = typeof(CreateAccount),
                 ["transaction"] = typeof(AuthorizeTransaction),
             };
 
-        private static JsonSerializerOptions parseOptions
+        private static JsonSerializerOptions ParseOptions
             = new JsonSerializerOptions
             {
                 // PropertyNameCaseInsensitive = true,
@@ -27,7 +27,7 @@ namespace Authorizer.Interface
             using (var json = JsonDocument.Parse(input))
             {
                 var rootNode = json.RootElement.EnumerateObject().First();
-                var matchingType = TypeMap[rootNode.Name];
+                var matchingType = typeMap[rootNode.Name];
 
                 var o = JsonSerializer
                     .Deserialize(rootNode.Value.GetRawText(), matchingType, parseOptions)

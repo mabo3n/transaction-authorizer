@@ -8,20 +8,19 @@ namespace Authorizer.Infrastructure
 {
     public class TransactionRepository : ITransactionRepository
     {
-        private IDataSource DataSource { get; }
+        private readonly IDataSource dataSource;
 
         public TransactionRepository(IDataSource dataSource)
-            => DataSource = dataSource;
+            => this.dataSource = dataSource;
 
         public IEnumerable<Transaction> QueryByTimeWindow(
-            DateTime from,
-            DateTime to
+            DateTime from, DateTime to
         )
-            => DataSource.Transactions
+            => dataSource.Transactions
                 .Where(t => t.Time > from && t.Time < to);
 
         public void Save(Transaction transaction)
-            => DataSource.Transactions = DataSource.Transactions
+            => dataSource.Transactions = dataSource.Transactions
                 .Append(transaction);
     }
 }

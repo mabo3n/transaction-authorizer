@@ -10,6 +10,9 @@ namespace Authorizer.Infrastructure
         public AccountRepository(IDataSource dataSource)
             => this.dataSource = dataSource;
 
+        public Account Get()
+            => dataSource.Account;
+
         public void Save(Account account)
             => dataSource.Account = account;
     }

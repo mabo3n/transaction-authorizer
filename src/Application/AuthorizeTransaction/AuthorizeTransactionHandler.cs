@@ -1,5 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Authorizer.Domain.Entities;
+using Authorizer.Domain.Enumerations;
 using MediatR;
 
 namespace Authorizer.Application
@@ -12,7 +14,12 @@ namespace Authorizer.Application
             CancellationToken cancellationToken
         )
         {
-            throw new System.NotImplementedException();
+            var op = new OperationResult() {
+                Account = new Account(payload.Amount, true),
+                Violations = new Violation[] { }
+            };
+
+            return Task.FromResult(op);
         }
     }
 }

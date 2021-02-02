@@ -1,5 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Authorizer.Domain.Entities;
+using Authorizer.Domain.Enumerations;
 using MediatR;
 
 namespace Authorizer.Application
@@ -13,7 +15,8 @@ namespace Authorizer.Application
         )
         {
             var op = new OperationResult() {
-                Account = new Authorizer.Domain.Entities.Account(123, true)
+                Account = new Account(payload.AvailableLimit, payload.ActiveCard),
+                Violations = new Violation[] { },
             };
 
             return Task.FromResult(op);

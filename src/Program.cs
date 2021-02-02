@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Authorizer.Application;
+using Authorizer.Interface;
 
 namespace Authorizer
 {
@@ -18,7 +19,8 @@ namespace Authorizer
                 .ConfigureServices((hostService, services) => {
                     services
                         .AddMediatR(typeof(Program).Assembly)
-                        .AddHostedService<ConsoleService>();
+                        .AddHostedService<ConsoleService>()
+                        .AddScoped<IInputParser<string>, JsonStringInputParser>();
                 })
                 .RunConsoleAsync();
         }

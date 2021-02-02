@@ -2,19 +2,21 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Authorizer.Application;
 using Microsoft.Extensions.Hosting;
 using MediatR;
+using Authorizer.Interface;
 
 namespace Authorizer
 {
     public class ConsoleService : IHostedService
     {
         private IMediator Mediator { get; }
+        private IInputParser<string> InputParser { get; }
 
-        public ConsoleService(IMediator mediator)
+        public ConsoleService(IMediator mediator, IInputParser<string> inputParser)
         {
             Mediator = mediator;
+            InputParser = inputParser;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -22,17 +24,19 @@ namespace Authorizer
             using (var stdinReader = new StreamReader(Console.OpenStandardInput()))
             {
                 var input = String.Empty;
-                while ((input = await stdinReader.ReadLineAsync()) != null)
+                while ((input = await stdinReader.ReadLineAsync()) != "exit")
                 {
-                    Console.WriteLine($"Processing: {input}");
                     try
                     {
-                        var result = await Mediator.Send(new CreateAccount());
-                        Console.WriteLine("Done: " + result.Account.AvailableLimit);
+                        var operation = InputParser.Parse(input);
+                        var operationResult = await Mediator.Send(operation);
+                        Console.WriteLine("Done: " + operationResult.Account.ActiveCard);
+                        Console.WriteLine("    : " + operationResult.Account.AvailableLimit);
+                        Console.WriteLine("    : " + string.Join(',', operationResult.Violations));
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"An error ocurred: {ex.ToString()}");
+                        Console.WriteLine("An error ocurred: " + ex.ToString());
                         await StopAsync(cancellationToken);
                     }
                 }

@@ -11,7 +11,7 @@ namespace Authorizer.Interface
         private static IDictionary<string, Type> TypeMap
             = new Dictionary<string, Type>
             {
-                ["create-account"] = typeof(CreateAccount),
+                ["account"] = typeof(CreateAccount),
                 ["transaction"] = typeof(AuthorizeTransaction),
             };
 

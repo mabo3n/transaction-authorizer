@@ -19,7 +19,13 @@ namespace Authorizer.Domain.Entities
             Time = time;
         }
 
+        public bool IsSimilarTo(Transaction other)
+            => other != null
+            && this.Merchant == other.Merchant
+            && this.Amount == other.Amount;
+
         public bool Equals(Transaction other)
-            => other != null && this.Id == other.Id;
+            => other != null
+            && this.Id == other.Id;
     }
 }

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using MediatR;
-using Authorizer.Interface;
+using Authorizer.Api;
 
 namespace Authorizer
 {

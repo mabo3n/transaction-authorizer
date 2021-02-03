@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace Authorizer.Interface
+namespace Authorizer.Api
 {
     public class DashCaseNamingPolicy : JsonNamingPolicy
     {

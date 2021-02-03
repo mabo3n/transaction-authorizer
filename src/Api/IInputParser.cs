@@ -1,6 +1,6 @@
 using Authorizer.Application;
 
-namespace Authorizer.Interface
+namespace Authorizer.Api
 {
     public interface IInputParser<TInput>
     {

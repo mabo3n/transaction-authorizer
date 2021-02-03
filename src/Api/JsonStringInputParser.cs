@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Authorizer.Application;
 
-namespace Authorizer.Interface
+namespace Authorizer.Api
 {
     public class JsonStringInputParser : IInputParser<string>
     {

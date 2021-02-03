@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using Authorizer.Interface;
+using Authorizer.Api;
 using Authorizer.Domain.Repositories;
 using Authorizer.Infrastructure;
 using Authorizer.Domain.Services;

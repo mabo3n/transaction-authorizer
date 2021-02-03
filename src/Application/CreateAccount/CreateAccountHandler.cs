@@ -22,12 +22,30 @@ namespace Authorizer.Application
             CancellationToken cancellationToken
         )
         {
-            var op = new OperationResult(
-                account: new Account(payload.AvailableLimit, payload.ActiveCard),
-                violations: new Violation[] { }
-            );
+            var existingAccount = accountRepository.Get();
 
-            return Task.FromResult(op);
+            if (existingAccount != null)
+                return Task.FromResult(
+                    new OperationResult(
+                        account: existingAccount,
+                        violations: new Violation[] {
+                            Violation.AccountAlreadyInitialized
+                        }
+                    )
+                );
+
+            var newAccount = new Account(
+                availableLimit: payload.AvailableLimit,
+                activeCard: payload.ActiveCard
+            );
+            accountRepository.Save(newAccount);
+
+            return Task.FromResult(
+                new OperationResult(
+                    account: newAccount,
+                    violations: new Violation[] { }
+                )
+            );
         }
     }
 }

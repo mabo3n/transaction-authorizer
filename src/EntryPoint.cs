@@ -8,7 +8,7 @@ using Authorizer.Domain.Services;
 
 namespace Authorizer
 {
-    public class Program
+    public class EntryPoint
     {
         private static void Main(string[] args)
         {
@@ -24,7 +24,7 @@ namespace Authorizer
                     // Application/Domain
                     services.AddScoped<ITransactionRepository, TransactionRepository>();
                     services.AddScoped<ITransactionService, TransactionService>();
-                    services.AddMediatR(typeof(Program).Assembly);
+                    services.AddMediatR(typeof(EntryPoint).Assembly);
 
                     // Api
                     services.AddScoped<IConsoleInterface, ConsoleInterface>();

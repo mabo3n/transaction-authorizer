@@ -10,13 +10,13 @@ namespace Authorizer
 {
     public class ConsoleHost : IHostedService
     {
-        private IMediator Mediator { get; }
-        private IInputParser<string> InputParser { get; }
+        private readonly IMediator mediator;
+        private readonly IInputParser<string> inputParser;
 
         public ConsoleHost(IMediator mediator, IInputParser<string> inputParser)
         {
-            Mediator = mediator;
-            InputParser = inputParser;
+            this.mediator = mediator;
+            this.inputParser = inputParser;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -28,8 +28,8 @@ namespace Authorizer
                 {
                     try
                     {
-                        var operation = InputParser.Parse(input);
-                        var operationResult = await Mediator.Send(operation);
+                        var operation = inputParser.Parse(input);
+                        var operationResult = await mediator.Send(operation);
                         Console.WriteLine("Done: " + operationResult.Account.ActiveCard);
                         Console.WriteLine("    : " + operationResult.Account.AvailableLimit);
                         Console.WriteLine("    : " + string.Join(',', operationResult.Violations));

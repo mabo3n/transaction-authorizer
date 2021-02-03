@@ -27,6 +27,7 @@ namespace Authorizer
                     services.AddMediatR(typeof(Program).Assembly);
 
                     // Api
+                    services.AddScoped<IConsoleInterface, ConsoleInterface>();
                     services.AddScoped<IInputParser<string>, JsonStringInputParser>();
                     services.AddHostedService<ConsoleHost>();
                 })

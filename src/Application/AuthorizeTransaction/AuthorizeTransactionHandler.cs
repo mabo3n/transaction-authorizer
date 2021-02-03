@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
@@ -31,12 +32,43 @@ namespace Authorizer.Application
             CancellationToken cancellationToken
         )
         {
+            var account = accountRepository.Get();
+
+            if (account == null)
+                return Task.FromResult(
+                    new OperationResult(
+                        account,
+                        violations: new Violation[] {
+                            Violation.AccountNotInitialized
+                        }
+                    )
+                );
+
+            var transaction = new Transaction(
+                payload.Merchant, payload.Amount, payload.Time
+            );
+
+            var violations = transactionService.Authorize(
+                transaction, account
+            );
+
+            if (violations.Any())
+                return Task.FromResult(
+                    new OperationResult(account, violations.ToArray())
+                );
+
+            var updatedAccount = account.Apply(transaction);
+            accountRepository.Save(updatedAccount);
+            transactionRepository.Save(transaction);
+
             var op = new OperationResult(
                 account: new Account(payload.Amount, true),
                 violations: new Violation[] { }
             );
 
-            return Task.FromResult(op);
+            return Task.FromResult(
+                new OperationResult(updatedAccount, violations.ToArray())
+            );
         }
     }
 }

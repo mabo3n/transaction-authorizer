@@ -12,8 +12,8 @@ namespace AuthorizerTests.Utils
         {
             randomizer = randomizer ?? new Random();
 
-            var interval = (end - start).Ticks;
-            var randomIntervalFraction = new Random().Next(0, (int)interval);
+            var interval = (end - start).TotalSeconds;
+            var randomIntervalFraction = randomizer.Next(0, (int)interval);
             return start + new TimeSpan(randomIntervalFraction);
         }
     }

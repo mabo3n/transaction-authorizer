@@ -24,7 +24,7 @@ namespace Authorizer
             using (var stdinReader = new StreamReader(Console.OpenStandardInput()))
             {
                 var input = String.Empty;
-                while ((input = await stdinReader.ReadLineAsync()) != "exit")
+                while ((input = await stdinReader.ReadLineAsync()) != null)
                 {
                     try
                     {

@@ -36,7 +36,7 @@ namespace Authorizer.Interface
                 // var newCreateAcc = new CreateAccount() { AvailableLimit = 300 };
                 // var test = JsonSerializer.Serialize<CreateAccount>(newCreateAcc, parseOptions);
 
-                Console.WriteLine(o);
+                // Console.WriteLine(o);
                 return o;
             }
         }

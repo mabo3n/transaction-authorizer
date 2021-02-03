@@ -8,12 +8,12 @@ using Authorizer.Api;
 
 namespace Authorizer
 {
-    public class ConsoleService : IHostedService
+    public class ConsoleHost : IHostedService
     {
         private IMediator Mediator { get; }
         private IInputParser<string> InputParser { get; }
 
-        public ConsoleService(IMediator mediator, IInputParser<string> inputParser)
+        public ConsoleHost(IMediator mediator, IInputParser<string> inputParser)
         {
             Mediator = mediator;
             InputParser = inputParser;

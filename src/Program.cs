@@ -28,7 +28,7 @@ namespace Authorizer
 
                     // Api
                     services.AddScoped<IInputParser<string>, JsonStringInputParser>();
-                    services.AddHostedService<ConsoleService>();
+                    services.AddHostedService<ConsoleHost>();
                 })
                 .RunConsoleAsync();
         }

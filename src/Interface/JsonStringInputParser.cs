@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Authorizer.Application;
 
 namespace Authorizer.Interface
@@ -15,12 +16,17 @@ namespace Authorizer.Interface
                 ["transaction"] = typeof(AuthorizeTransaction),
             };
 
-        private static JsonSerializerOptions parseOptions
-            = new JsonSerializerOptions
-            {
-                // PropertyNameCaseInsensitive = true,
-                PropertyNamingPolicy = new DashCaseNamingPolicy()
+        private readonly JsonNamingPolicy namingPolicy;
+        private readonly JsonSerializerOptions parsingOptions;
+
+        public JsonStringInputParser()
+        {
+            namingPolicy = new DashCaseNamingPolicy();
+            parsingOptions = new JsonSerializerOptions {
+                PropertyNamingPolicy = namingPolicy,
+                Converters = { new JsonStringEnumConverter(namingPolicy) }
             };
+        }
 
         public Operation Parse(string input)
         {
@@ -30,7 +36,7 @@ namespace Authorizer.Interface
                 var matchingType = typeMap[rootNode.Name];
 
                 var o = JsonSerializer
-                    .Deserialize(rootNode.Value.GetRawText(), matchingType, parseOptions)
+                    .Deserialize(rootNode.Value.GetRawText(), matchingType, parsingOptions)
                     as Operation;
 
                 // var newCreateAcc = new CreateAccount() { AvailableLimit = 300 };

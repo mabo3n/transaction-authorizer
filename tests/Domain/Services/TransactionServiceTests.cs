@@ -43,45 +43,51 @@ namespace AuthorizerTests.Domain.Services
         [Fact]
         public void Authorize_ShouldReturnNoViolation()
         {
-            dataSource.Account = new Account(availableLimit: 100, activeCard: true);
+            var account = new Account(availableLimit: 100, activeCard: true);
 
             var someTransaction = new Transaction(
                 merchant: "Some merchant", amount: 200, time: 05.February(2021)
             );
 
-            var violations = service.Authorize(someTransaction);
+            var violations = service.Authorize(someTransaction, account);
 
             violations
                 .Should().BeEmpty();
         }
 
         [Fact]
-        public void Authorize_ShouldReturnViolation_WhenAccountIsNotInitialized()
+        public void Authorize_ShouldReturnException_WhenAccountIsNull()
         {
-            dataSource.Account = null;
+            Account account = null;
 
             var someTransaction = new Transaction(
                 merchant: "Some merchant", amount: 200, time: 05.February(2021)
             );
 
-            var violations = service.Authorize(someTransaction);
+            var violations = service.Authorize(someTransaction, account);
 
-            violations
-                .Should().HaveCount(1)
-                .And
-                .Contain(Violation.AccountNotInitialized);
+            var exception = Record.Exception(
+                () => account.Apply(someTransaction)
+            );
+
+            exception
+                .Should()
+                .BeOfType<ArgumentException>()
+                .Which.Message
+                .Should()
+                .MatchEquivalentOf("*account*");
         }
 
         [Fact]
         public void Authorize_ShouldReturnViolation_WhenAccountCardIsNotActive()
         {
-            dataSource.Account = new Account(availableLimit: 100, activeCard: false);
+            var account = new Account(availableLimit: 100, activeCard: false);
 
             var someTransaction = new Transaction(
                 merchant: "Some merchant", amount: 50, time: 05.February(2021)
             );
 
-            var violations = service.Authorize(someTransaction);
+            var violations = service.Authorize(someTransaction, account);
 
             violations
                 .Should().HaveCount(1)
@@ -92,7 +98,7 @@ namespace AuthorizerTests.Domain.Services
         [Fact]
         public void Authorize_ShouldReturnViolation_WhenAccountHasInsufficientLimit()
         {
-            dataSource.Account = new Account(
+            var account = new Account(
                 availableLimit: 380, activeCard: false
             );
 
@@ -100,7 +106,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 420, time: 05.February(2021)
             );
 
-            var violations = service.Authorize(transaction);
+            var violations = service.Authorize(transaction, account);
 
             violations
                 .Should().HaveCount(1)
@@ -111,7 +117,7 @@ namespace AuthorizerTests.Domain.Services
         [Fact]
         public void Authorize_ShouldReturnViolation_WhenTransactionsExceedThreeInATwoMinuteInterval()
         {
-            dataSource.Account = new Account(availableLimit: 1000, activeCard: true);
+            var account = new Account(availableLimit: 1000, activeCard: true);
 
             DateTime now = 5.February(2021);
             DateTime minutesAgo(int minutes) => now.AddMinutes(-minutes);
@@ -131,7 +137,7 @@ namespace AuthorizerTests.Domain.Services
                 merchant: "Some merchant", amount: 10, time: now
             );
 
-            var violations = service.Authorize(transaction);
+            var violations = service.Authorize(transaction, account);
 
             violations
                 .Should().HaveCount(1)
@@ -142,7 +148,7 @@ namespace AuthorizerTests.Domain.Services
         [Fact]
         public void Authorize_ShouldReturnViolation_WhenTransactionIsDoubledInATwoMinuteInterval()
         {
-            dataSource.Account = new Account(availableLimit: 1000, activeCard: true);
+            var account = new Account(availableLimit: 1000, activeCard: true);
 
             var merchant = "BurgBurgBurg";
             var amount = 123;
@@ -167,7 +173,7 @@ namespace AuthorizerTests.Domain.Services
 
             var doubledTransaction = new Transaction(merchant, amount, time: now);
 
-            var violations = service.Authorize(doubledTransaction);
+            var violations = service.Authorize(doubledTransaction, account);
 
             violations
                 .Should().HaveCount(1)
@@ -178,7 +184,7 @@ namespace AuthorizerTests.Domain.Services
         [Fact]
         public void Authorize_ShouldNotReturnViolation_WhenTransactionIsDoubledAfterATwoMinuteInterval()
         {
-            dataSource.Account = new Account(availableLimit: 1000, activeCard: true);
+            var account = new Account(availableLimit: 1000, activeCard: true);
 
             var merchant = "BurgBurgBurg";
             var amount = 123;
@@ -203,7 +209,7 @@ namespace AuthorizerTests.Domain.Services
 
             var transaction = new Transaction(merchant, amount, time: now);
 
-            var violations = service.Authorize(transaction);
+            var violations = service.Authorize(transaction, account);
 
             violations
                 .Should().BeEmpty();
@@ -212,7 +218,7 @@ namespace AuthorizerTests.Domain.Services
         [Fact]
         public void Authorize_ShouldReturnMultipleViolations_WhenTransactionIsDoubledAndExceedsAccountLimitAndTransactionQuantityLimit()
         {
-            dataSource.Account = new Account(availableLimit: 1000, activeCard: true);
+            var account = new Account(availableLimit: 1000, activeCard: true);
 
             var merchant = "BurgBurgBurg";
             var amount = 300;
@@ -237,7 +243,7 @@ namespace AuthorizerTests.Domain.Services
 
             var transaction = new Transaction(merchant, amount, time: now);
 
-            var violations = service.Authorize(transaction);
+            var violations = service.Authorize(transaction, account);
 
             violations
                 .Should().HaveCount(3)

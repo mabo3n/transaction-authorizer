@@ -14,7 +14,9 @@ namespace Authorizer.Domain.Services
             this.transactionRepository = transactionRepository;
         }
 
-        public IEnumerable<Violation> Authorize(Transaction transaction)
+        public IEnumerable<Violation> Authorize(
+            Transaction transaction, Account account
+        )
         {
             yield break;
         }

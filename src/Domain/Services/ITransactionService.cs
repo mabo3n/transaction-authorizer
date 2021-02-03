@@ -6,6 +6,8 @@ namespace Authorizer.Domain.Services
 {
     public interface ITransactionService
     {
-        IEnumerable<Violation> Authorize(Transaction transaction);
+        IEnumerable<Violation> Authorize(
+            Transaction transaction, Account account
+        );
     }
 }

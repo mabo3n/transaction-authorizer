@@ -1,16 +1,14 @@
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 using Authorizer.Domain.Enumerations;
 using Authorizer.Domain.Repositories;
 using Authorizer.Domain.Services;
-using MediatR;
 
 namespace Authorizer.Application
 {
     public class AuthorizeTransactionHandler
-        : IRequestHandler<AuthorizeTransaction, OperationResult>
+        : IOperationHandler<AuthorizeTransaction>
     {
         private readonly IAccountRepository accountRepository;
         private readonly ITransactionRepository transactionRepository;
@@ -27,10 +25,7 @@ namespace Authorizer.Application
             this.transactionService = transactionService;
         }
 
-        public Task<OperationResult> Handle(
-            AuthorizeTransaction payload,
-            CancellationToken cancellationToken
-        )
+        public Task<OperationResult> Handle(AuthorizeTransaction payload)
         {
             var account = accountRepository.Get();
 

@@ -1,14 +1,11 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 using Authorizer.Domain.Enumerations;
 using Authorizer.Domain.Repositories;
-using MediatR;
 
 namespace Authorizer.Application
 {
-    public class CreateAccountHandler
-        : IRequestHandler<CreateAccount, OperationResult>
+    public class CreateAccountHandler : IOperationHandler<CreateAccount>
     {
         private readonly IAccountRepository accountRepository;
 
@@ -17,10 +14,7 @@ namespace Authorizer.Application
             this.accountRepository = accountRepository;
         }
 
-        public Task<OperationResult> Handle(
-            CreateAccount payload,
-            CancellationToken cancellationToken
-        )
+        public Task<OperationResult> Handle(CreateAccount payload)
         {
             var existingAccount = accountRepository.Get();
 

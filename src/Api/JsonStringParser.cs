@@ -27,7 +27,7 @@ namespace Authorizer.Api
         }
 
         public T Parse<T>(string jsonString)
-            => JsonSerializer .Deserialize<T>(jsonString, parsingOptions);
+            => JsonSerializer.Deserialize<T>(jsonString, parsingOptions);
 
         public string Stringify<T>(T @object)
             => JsonSerializer.Serialize<T>(@object, parsingOptions);

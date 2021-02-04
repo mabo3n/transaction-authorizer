@@ -4,7 +4,6 @@ using Authorizer.Api;
 using Authorizer.Domain.Repositories;
 using Authorizer.Infrastructure;
 using Authorizer.Domain.Services;
-using MediatR;
 using Authorizer.Application;
 
 namespace Authorizer
@@ -17,18 +16,17 @@ namespace Authorizer
                 // .ConfigureLogging(
                 //     logging => logging.ClearProviders()
                 // )
-                .ConfigureServices((hostService, services) => {
+                .ConfigureServices(services => {
                     // Infra
                     services.AddScoped<IDataSource, InMemoryDataSource>();
                     services.AddScoped<IAccountRepository, AccountRepository>();
                     services.AddScoped<ITransactionRepository, TransactionRepository>();
 
                     // Application/Domain
-                    services.AddMediatR(typeof(EntryPoint).Assembly);
                     services.AddScoped<ITransactionService, TransactionService>();
                     services.AddScoped<ITransactionService, TransactionService>();
-                    services.AddScoped<CreateAccountHandler>();
-                    services.AddScoped<AuthorizeTransactionHandler>();
+                    services.AddScoped<IOperationHandler<CreateAccount>, CreateAccountHandler>();
+                    services.AddScoped<IOperationHandler<AuthorizeTransaction>, AuthorizeTransactionHandler>();
 
                     // Api
                     services.AddScoped<IConsoleInterface, ConsoleInterface>();

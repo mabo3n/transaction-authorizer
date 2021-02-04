@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using MediatR;
 using Authorizer.Api;
 using Authorizer.Application;
 
@@ -13,21 +12,18 @@ namespace Authorizer
     {
         private readonly IConsoleInterface console;
         private readonly JsonStringParser jsonParser;
-        private readonly IMediator mediator;
-        private readonly CreateAccountHandler createAccountHandler;
-        private readonly AuthorizeTransactionHandler authorizeTransactionHandler;
+        private readonly IOperationHandler<CreateAccount> createAccountHandler;
+        private readonly IOperationHandler<AuthorizeTransaction> authorizeTransactionHandler;
 
         public ConsoleHost(
             IConsoleInterface console,
             JsonStringParser jsonParser,
-            IMediator mediator,
-            CreateAccountHandler createAccountHandler,
-            AuthorizeTransactionHandler authorizeTransactionHandler
+            IOperationHandler<CreateAccount> createAccountHandler,
+            IOperationHandler<AuthorizeTransaction> authorizeTransactionHandler
         )
         {
             this.console = console;
             this.jsonParser = jsonParser;
-            this.mediator = mediator;
             this.createAccountHandler = createAccountHandler;
             this.authorizeTransactionHandler = authorizeTransactionHandler;
         }
@@ -47,8 +43,8 @@ namespace Authorizer
 
                     var result = operationName switch
                     {
-                        "account" => await createAccountHandler.Handle(jsonParser.Parse<CreateAccount>(payload), CancellationToken.None),
-                        "transaction" => await authorizeTransactionHandler.Handle(jsonParser.Parse<AuthorizeTransaction>(payload), CancellationToken.None),
+                        "account" => await createAccountHandler.Handle(jsonParser.Parse<CreateAccount>(payload)),
+                        "transaction" => await authorizeTransactionHandler.Handle(jsonParser.Parse<AuthorizeTransaction>(payload)),
                         _ => throw new Exception(),
                     };
 

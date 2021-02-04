@@ -4,7 +4,8 @@ namespace Authorizer.Api
 {
     public interface IConsoleInterface
     {
-        Stream GetStdIn();
-        void WriteToStdOut(string text);
+        Stream Stdin { get; }
+        Stream Stdout { get; }
+        Stream Stderr { get; }
     }
 }

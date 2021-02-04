@@ -5,10 +5,10 @@ namespace Authorizer.Api
 {
     public class ConsoleInterface : IConsoleInterface
     {
-        public Stream GetStdIn()
-            => Console.OpenStandardInput();
+        public Stream Stdin => Console.OpenStandardInput();
 
-        public void WriteToStdOut(string text)
-            => Console.Out.WriteLine(text);
+        public Stream Stdout => Console.OpenStandardOutput();
+
+        public Stream Stderr => Console.OpenStandardError();
     }
 }

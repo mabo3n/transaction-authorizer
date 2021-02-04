@@ -30,13 +30,14 @@ namespace Authorizer
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var stdin = console.GetStdIn();
-            using var stdinReader = new StreamReader(stdin);
-            var input = String.Empty;
+            using var stdinReader = new StreamReader(console.Stdin);
+            using var stdoutWriter = new StreamWriter(console.Stdout);
+            using var stderrWriter = new StreamWriter(console.Stderr);
 
-            while ((input = await stdinReader.ReadLineAsync()) != null)
+            try
             {
-                try
+                var input = String.Empty;
+                while ((input = await stdinReader.ReadLineAsync()) != null)
                 {
                     var (operationName, payload)
                         = jsonParser.GetRootAttribute(input);
@@ -48,13 +49,13 @@ namespace Authorizer
                         _ => throw new Exception(),
                     };
 
-                    console.WriteToStdOut(jsonParser.Stringify<OperationResult>(result));
+                    stdoutWriter.WriteLine(jsonParser.Stringify<OperationResult>(result));
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An error ocurred: " + ex.ToString());
-                    await StopAsync(cancellationToken);
-                }
+            }
+            catch (Exception ex)
+            {
+                stderrWriter.WriteLine($"An error ocurred: {ex.ToString()}");
+                await StopAsync(cancellationToken);
             }
         }
 

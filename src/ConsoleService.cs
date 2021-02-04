@@ -28,6 +28,26 @@ namespace Authorizer
             this.authorizeTransactionHandler = authorizeTransactionHandler;
         }
 
+
+        private async Task<string> Resolve(string input)
+        {
+            T As<T>(string payload) => jsonParser.Parse<T>(payload);
+            var (operationName, payload) = jsonParser.GetRootAttribute(input);
+
+            var operationResult = operationName switch
+            {
+                "account" => await createAccountHandler.Handle(
+                    As<CreateAccount>(payload)
+                ),
+                "transaction" => await authorizeTransactionHandler.Handle(
+                    As<AuthorizeTransaction>(payload)
+                ),
+                _ => throw new Exception(),
+            };
+
+            return jsonParser.Stringify<OperationResult>(operationResult);
+        }
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             using var stdinReader = new StreamReader(console.Stdin);
@@ -39,17 +59,9 @@ namespace Authorizer
                 var input = String.Empty;
                 while ((input = await stdinReader.ReadLineAsync()) != null)
                 {
-                    var (operationName, payload)
-                        = jsonParser.GetRootAttribute(input);
+                    var output = await Resolve(input);
 
-                    var result = operationName switch
-                    {
-                        "account" => await createAccountHandler.Handle(jsonParser.Parse<CreateAccount>(payload)),
-                        "transaction" => await authorizeTransactionHandler.Handle(jsonParser.Parse<AuthorizeTransaction>(payload)),
-                        _ => throw new Exception(),
-                    };
-
-                    stdoutWriter.WriteLine(jsonParser.Stringify<OperationResult>(result));
+                    stdoutWriter.WriteLine(output);
                 }
             }
             catch (Exception ex)

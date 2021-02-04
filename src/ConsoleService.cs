@@ -8,14 +8,14 @@ using Authorizer.Application;
 
 namespace Authorizer
 {
-    public class ConsoleHost : IHostedService
+    public class ConsoleService : IHostedService
     {
         private readonly IConsoleInterface console;
         private readonly JsonStringParser jsonParser;
         private readonly IOperationHandler<CreateAccount> createAccountHandler;
         private readonly IOperationHandler<AuthorizeTransaction> authorizeTransactionHandler;
 
-        public ConsoleHost(
+        public ConsoleService(
             IConsoleInterface console,
             JsonStringParser jsonParser,
             IOperationHandler<CreateAccount> createAccountHandler,

@@ -33,7 +33,7 @@ namespace Authorizer
                     services.AddScoped<JsonStringParser>();
 
                     // Host
-                    services.AddHostedService<ConsoleHost>();
+                    services.AddHostedService<ConsoleService>();
                 })
                 .RunConsoleAsync();
         }

@@ -4,7 +4,6 @@ using Authorizer.Infrastructure;
 using Authorizer.Domain.Enumerations;
 using Authorizer.Application;
 using Authorizer.Domain.Services;
-using System.Threading;
 using FluentAssertions.Extensions;
 using Authorizer.Domain.Entities;
 using System.Linq;
@@ -38,7 +37,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant ABC", amount: 123, time: 31.March(2012)
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             result.Violations
                 .Should().NotBeNull()
@@ -57,7 +56,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant ABC", amount: 100, time: 31.March(2012)
             );
 
-            await handler.Handle(operation, CancellationToken.None);
+            await handler.Handle(operation);
 
             var storedTransactions = dataSource.Transactions;
 
@@ -87,7 +86,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant ABC", amount: 100, time: 12.December(2012)
             );
 
-            await handler.Handle(operation, CancellationToken.None);
+            await handler.Handle(operation);
 
             var updatedAccount = dataSource.Account;
 
@@ -109,7 +108,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant ABC", amount: 5, time: 12.December(2012)
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             var updatedAccount = dataSource.Account;
 
@@ -131,7 +130,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant ABC", amount: 5, time: 12.December(2012)
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             result.Violations
                 .Should().NotBeNull()
@@ -150,7 +149,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant DEF", amount: 100, time: 12.December(2012)
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             result.Violations
                 .Should().NotBeNull()
@@ -170,7 +169,7 @@ namespace AuthorizerTests.Application
                 merchant: "Merchant DEF", amount: 1000, time: 12.December(2012)
             );
 
-            await handler.Handle(operation, CancellationToken.None);
+            await handler.Handle(operation);
 
             var updatedAccount = dataSource.Account;
 
@@ -195,7 +194,7 @@ namespace AuthorizerTests.Application
                 merchant: "Memerchant", amount: 100, time: 01.January(2080)
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             result.Violations
                 .Should().NotBeNull()

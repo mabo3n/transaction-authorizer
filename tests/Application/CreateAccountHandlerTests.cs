@@ -5,7 +5,6 @@ using Authorizer.Infrastructure;
 using Authorizer.Domain.Enumerations;
 using Authorizer.Application;
 using Authorizer.Domain.Repositories;
-using System.Threading;
 
 namespace AuthorizerTests.Application
 {
@@ -30,7 +29,7 @@ namespace AuthorizerTests.Application
                 activeCard: true, availableLimit: 100
             );
 
-            await handler.Handle(operation, CancellationToken.None);
+            await handler.Handle(operation);
 
             var createdAccount = dataSource.Account;
 
@@ -53,7 +52,7 @@ namespace AuthorizerTests.Application
                 activeCard: false, availableLimit: 300
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             var createdAccount = dataSource.Account;
 
@@ -73,7 +72,7 @@ namespace AuthorizerTests.Application
                 activeCard: true, availableLimit: 0
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             result.Violations
                 .Should().NotBeNull()
@@ -93,7 +92,7 @@ namespace AuthorizerTests.Application
                 activeCard: true, availableLimit: 312
             );
 
-            var result = await handler.Handle(operation, CancellationToken.None);
+            var result = await handler.Handle(operation);
 
             result.Violations
                 .Should().HaveCount(1)
@@ -113,7 +112,7 @@ namespace AuthorizerTests.Application
                 activeCard: true, availableLimit: 800
             );
 
-            await handler.Handle(operation, CancellationToken.None);
+            await handler.Handle(operation);
 
             var updatedAccount = dataSource.Account;
 

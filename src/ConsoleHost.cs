@@ -5,47 +5,59 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using MediatR;
 using Authorizer.Api;
+using Authorizer.Application;
 
 namespace Authorizer
 {
     public class ConsoleHost : IHostedService
     {
-        private readonly IMediator mediator;
-        private readonly IInputParser<string> inputParser;
         private readonly IConsoleInterface console;
+        private readonly JsonStringParser jsonParser;
+        private readonly IMediator mediator;
+        private readonly CreateAccountHandler createAccountHandler;
+        private readonly AuthorizeTransactionHandler authorizeTransactionHandler;
 
         public ConsoleHost(
+            IConsoleInterface console,
+            JsonStringParser jsonParser,
             IMediator mediator,
-            IInputParser<string> inputParser,
-            IConsoleInterface console
+            CreateAccountHandler createAccountHandler,
+            AuthorizeTransactionHandler authorizeTransactionHandler
         )
         {
-            this.mediator = mediator;
-            this.inputParser = inputParser;
             this.console = console;
+            this.jsonParser = jsonParser;
+            this.mediator = mediator;
+            this.createAccountHandler = createAccountHandler;
+            this.authorizeTransactionHandler = authorizeTransactionHandler;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var stdin = console.GetStdIn();
-            using (var stdinReader = new StreamReader(stdin))
+            using var stdinReader = new StreamReader(stdin);
+            var input = String.Empty;
+
+            while ((input = await stdinReader.ReadLineAsync()) != null)
             {
-                var input = String.Empty;
-                while ((input = await stdinReader.ReadLineAsync()) != null)
+                try
                 {
-                    try
+                    var (operationName, payload)
+                        = jsonParser.GetRootAttribute(input);
+
+                    var result = operationName switch
                     {
-                        var operation = inputParser.Parse(input);
-                        var operationResult = await mediator.Send(operation);
-                        console.WriteToStdOut("Done: " + operationResult.Account.ActiveCard);
-                        console.WriteToStdOut("    : " + operationResult.Account.AvailableLimit);
-                        console.WriteToStdOut("    : " + string.Join(',', operationResult.Violations));
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("An error ocurred: " + ex.ToString());
-                        await StopAsync(cancellationToken);
-                    }
+                        "account" => await createAccountHandler.Handle(jsonParser.Parse<CreateAccount>(payload), CancellationToken.None),
+                        "transaction" => await authorizeTransactionHandler.Handle(jsonParser.Parse<AuthorizeTransaction>(payload), CancellationToken.None),
+                        _ => throw new Exception(),
+                    };
+
+                    console.WriteToStdOut(jsonParser.Stringify<OperationResult>(result));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error ocurred: " + ex.ToString());
+                    await StopAsync(cancellationToken);
                 }
             }
         }

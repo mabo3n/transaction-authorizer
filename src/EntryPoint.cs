@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using MediatR;
 using Authorizer.Api;
 using Authorizer.Domain.Repositories;
 using Authorizer.Infrastructure;
 using Authorizer.Domain.Services;
+using MediatR;
+using Authorizer.Application;
 
 namespace Authorizer
 {
@@ -20,15 +21,20 @@ namespace Authorizer
                     // Infra
                     services.AddScoped<IDataSource, InMemoryDataSource>();
                     services.AddScoped<IAccountRepository, AccountRepository>();
+                    services.AddScoped<ITransactionRepository, TransactionRepository>();
 
                     // Application/Domain
-                    services.AddScoped<ITransactionRepository, TransactionRepository>();
-                    services.AddScoped<ITransactionService, TransactionService>();
                     services.AddMediatR(typeof(EntryPoint).Assembly);
+                    services.AddScoped<ITransactionService, TransactionService>();
+                    services.AddScoped<ITransactionService, TransactionService>();
+                    services.AddScoped<CreateAccountHandler>();
+                    services.AddScoped<AuthorizeTransactionHandler>();
 
                     // Api
                     services.AddScoped<IConsoleInterface, ConsoleInterface>();
-                    services.AddScoped<IInputParser<string>, JsonStringInputParser>();
+                    services.AddScoped<JsonStringParser>();
+
+                    // Host
                     services.AddHostedService<ConsoleHost>();
                 })
                 .RunConsoleAsync();

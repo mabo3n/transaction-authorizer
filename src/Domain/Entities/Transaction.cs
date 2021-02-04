@@ -2,7 +2,7 @@ using System;
 
 namespace Authorizer.Domain.Entities
 {
-    public class Transaction : IEquatable<Transaction>
+    public class Transaction
     {
         public Guid Id { get; }
 
@@ -23,9 +23,5 @@ namespace Authorizer.Domain.Entities
             => other != null
             && this.Merchant == other.Merchant
             && this.Amount == other.Amount;
-
-        public bool Equals(Transaction other)
-            => other != null
-            && this.Id == other.Id;
     }
 }

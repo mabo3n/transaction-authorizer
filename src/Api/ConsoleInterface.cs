@@ -9,6 +9,6 @@ namespace Authorizer.Api
             => Console.OpenStandardInput();
 
         public void WriteToStdOut(string text)
-            => Console.Out.Write(text);
+            => Console.Out.WriteLine(text);
     }
 }

@@ -1,1 +1,35 @@
-Hey I'm the README
+* Description
+
+  A tiny command line application to authorize financial transactions on an account.
+
+  The application listens for json-formatted operations in the standard input, and outputs the results to the standard output. For a complete specification of the features and business rules, please refer to Nubank's *Code Challenge: Authorizer* document.
+
+* Requirements
+
+  [[https://www.docker.com/][Docker]]
+
+* Build
+
+  #+begin_src shell
+  docker build . -f Authorizer.Dockerfile -t authorizer:latest
+  #+end_src
+
+* Run
+
+  Example input:
+  
+  #+begin_src shell
+  cat > operations <<EOF
+  {"account": {"active-card": true, "available-limit": 100}}
+  {"transaction": {"merchant": "Burger King", "amount": 20, "time": "2019-02-13T10:00:00.000Z"}}
+  {"transaction": {"merchant": "Habbib's", "amount": 90, "time": "2019-02-13T11:00:00.000Z"}}
+  EOF
+  #+end_src
+  
+  #+begin_src shell
+  docker run -it --rm authorizer:latest operations
+  #+end_src
+
+* Further information
+
+  See =RADIONALE.md=.

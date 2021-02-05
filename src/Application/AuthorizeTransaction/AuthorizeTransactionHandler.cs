@@ -41,9 +41,9 @@ namespace Authorizer.Application
                 payload.Merchant, payload.Amount, payload.Time
             );
 
-            var violations = transactionService.Authorize(
-                transaction, account
-            );
+            var violations = transactionService
+                .Authorize(transaction, account)
+                .ToList();
 
             if (violations.Any())
                 return new OperationResult(account, violations.ToArray());

@@ -18,7 +18,7 @@ namespace Authorizer.Infrastructure
             DateTime from, DateTime to
         )
             => dataSource.Transactions
-                .Where(t => t.Time > from && t.Time < to);
+                .Where(t => t.Time >= from && t.Time <= to);
 
         public Task Save(Transaction transaction)
         {

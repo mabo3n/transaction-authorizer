@@ -15,7 +15,7 @@ namespace Authorizer
         private readonly IOperationHandler<CreateAccount> createAccountHandler;
         private readonly IOperationHandler<AuthorizeTransaction> authorizeTransactionHandler;
 
-        public ConsoleService(
+        public ConsoleHost(
             IConsoleInterface console,
             JsonStringParser jsonParser,
             IOperationHandler<CreateAccount> createAccountHandler,

@@ -42,7 +42,9 @@ namespace Authorizer
                 "transaction" => await authorizeTransactionHandler.Handle(
                     As<AuthorizeTransaction>(payload)
                 ),
-                _ => throw new Exception(),
+                _ => throw new Exception(
+                    $"Unrecognizable operation {operationName}"
+                ),
             };
 
             return jsonParser.Stringify<OperationResult>(operationResult);

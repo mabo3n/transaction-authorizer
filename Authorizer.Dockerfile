@@ -7,4 +7,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 as release
 WORKDIR /app
 COPY --from=build /app/publish/ .
 EXPOSE 80
-ENTRYPOINT ["dotnet", "Authorizer.dll"]
+CMD dotnet Authorizer.dll

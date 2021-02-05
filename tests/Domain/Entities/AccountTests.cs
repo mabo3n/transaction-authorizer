@@ -24,7 +24,7 @@ namespace AuthorizerTests.Domain.Entities
         }
 
         [Fact]
-        public void Apply_ShouldReturnNewAccount_WithUpdatedData()
+        public void Apply_ShouldReturnNewAccountWithUpdatedData()
         {
             var account = new Account(availableLimit: 100, activeCard: true);
 
@@ -36,6 +36,27 @@ namespace AuthorizerTests.Domain.Entities
 
             newAccount.AvailableLimit
                 .Should().Be(75);
+
+            newAccount.ActiveCard
+                .Should().Be(true);
+        }
+
+        [Fact]
+        public void Apply_ShouldReturnNewAccountWithUpdatedData_WhenApplyingMultipleTransactions()
+        {
+            var account = new Account(availableLimit: 100, activeCard: true);
+
+            var transactions = new [] {
+                new Transaction(merchant: "A", amount: 25, time: 03.July(2008)),
+                new Transaction(merchant: "B", amount: 26, time: 04.July(2008)),
+                new Transaction(merchant: "C", amount: 24, time: 05.July(2008)),
+                new Transaction(merchant: "D", amount: 25, time: 06.July(2008)),
+            };
+
+            var newAccount = account.Apply(transactions);
+
+            newAccount.AvailableLimit
+                .Should().Be(0);
 
             newAccount.ActiveCard
                 .Should().Be(true);

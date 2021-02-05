@@ -16,7 +16,7 @@ namespace AuthorizerTests.Application
         public CreateAccountHandlerTests()
         {
             dataSource = new InMemoryDataSource();
-            IAccountRepository accountRepository = new AccountRepository(dataSource);
+            var accountRepository = new AccountRepository(dataSource);
             handler = new CreateAccountHandler(accountRepository);
         }
 

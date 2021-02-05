@@ -24,12 +24,12 @@ namespace AuthorizerTests.Domain.Services
             service = new TransactionService(transactionRepository);
         }
 
-        private void PerformTransaction(Transaction transaction)
+        private void PerformTransaction(params Transaction[] transaction)
         {
-            dataSource.Transactions = dataSource.Transactions
-                .Append(transaction);
             dataSource.Account = dataSource.Account
                 .Apply(transaction);
+            dataSource.Transactions = dataSource.Transactions
+                .Concat(transaction);
         }
 
         private void PerformRandomTransactions(
@@ -46,13 +46,7 @@ namespace AuthorizerTests.Domain.Services
                 )
             );
 
-            dataSource.Account = transactions.Aggregate(
-                dataSource.Account,
-                (account, transaction) => account.Apply(transaction)
-            );
-
-            dataSource.Transactions = dataSource.Transactions
-                .Concat(transactions);
+            PerformTransaction(transactions.ToArray());
         }
 
         [Fact]

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Authorizer.Domain.Entities
 {
@@ -17,14 +18,20 @@ namespace Authorizer.Domain.Entities
             ActiveCard = activeCard;
         }
 
-        public Account Apply(Transaction transaction)
+        private Account Apply(Transaction transaction)
             => ActiveCard
                 ? new Account(
-                    this.AvailableLimit - transaction.Amount,
-                    this.ActiveCard
+                    AvailableLimit - transaction.Amount,
+                    ActiveCard
                 )
                 : throw new InvalidOperationException(
                     "Account card is not active"
                 );
+
+        public Account Apply(params Transaction[] transactions)
+            => transactions.Aggregate(
+                this,
+                (account, transaction) => account.Apply(transaction)
+            );
     }
 }

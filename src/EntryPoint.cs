@@ -30,7 +30,6 @@ namespace Authorizer
                     services.AddScoped<IOperationHandler<AuthorizeTransaction>, AuthorizeTransactionHandler>();
 
                     // Api
-                    services.AddScoped<IConsoleInterface, ConsoleInterface>();
                     services.AddScoped<JsonStringParser>();
 
                     // Host

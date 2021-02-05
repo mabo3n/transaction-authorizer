@@ -27,7 +27,7 @@
   #+end_src
   
   #+begin_src shell
-  docker run -it --rm authorizer:latest operations
+  docker run -i --rm authorizer:latest < operations
   #+end_src
 
 * Further information

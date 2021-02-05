@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 using Authorizer.Domain.Repositories;
 
@@ -16,11 +17,19 @@ namespace Authorizer.Infrastructure
         public IEnumerable<Transaction> QueryByTimeWindow(
             DateTime from, DateTime to
         )
-            => dataSource.Transactions
+        {
+            var transactions = dataSource.Transactions
                 .Where(t => t.Time > from && t.Time < to);
 
-        public void Save(Transaction transaction)
-            => dataSource.Transactions = dataSource.Transactions
+            return dataSource.Transactions;
+        }
+
+        public Task Save(Transaction transaction)
+        {
+            dataSource.Transactions = dataSource.Transactions
                 .Append(transaction);
+
+            return Task.CompletedTask;
+        }
     }
 }

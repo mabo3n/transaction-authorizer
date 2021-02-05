@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 using Authorizer.Domain.Repositories;
 
@@ -10,10 +11,10 @@ namespace Authorizer.Infrastructure
         public AccountRepository(IDataSource dataSource)
             => this.dataSource = dataSource;
 
-        public Account Get()
-            => dataSource.Account;
+        public Task<Account> Get()
+            => Task.FromResult(dataSource.Account);
 
-        public void Save(Account account)
-            => dataSource.Account = account;
+        public Task Save(Account account)
+            => Task.FromResult(dataSource.Account = account);
     }
 }

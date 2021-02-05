@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 
 namespace Authorizer.Domain.Repositories
@@ -10,6 +11,6 @@ namespace Authorizer.Domain.Repositories
             DateTime from, DateTime to
         );
 
-        public void Save(Transaction transaction);
+        public Task Save(Transaction transaction);
     }
 }

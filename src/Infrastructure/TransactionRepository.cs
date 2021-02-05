@@ -17,12 +17,8 @@ namespace Authorizer.Infrastructure
         public IEnumerable<Transaction> QueryByTimeWindow(
             DateTime from, DateTime to
         )
-        {
-            var transactions = dataSource.Transactions
+            => dataSource.Transactions
                 .Where(t => t.Time > from && t.Time < to);
-
-            return dataSource.Transactions;
-        }
 
         public Task Save(Transaction transaction)
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 using Authorizer.Domain.Enumerations;
@@ -14,31 +15,28 @@ namespace Authorizer.Application
             this.accountRepository = accountRepository;
         }
 
-        public Task<OperationResult> Handle(CreateAccount payload)
+        public async Task<OperationResult> Handle(CreateAccount payload)
         {
-            var existingAccount = accountRepository.Get();
+            var existingAccount = await accountRepository.Get();
 
             if (existingAccount != null)
-                return Task.FromResult(
-                    new OperationResult(
-                        account: existingAccount,
-                        violations: new Violation[] {
-                            Violation.AccountAlreadyInitialized
-                        }
-                    )
+                return new OperationResult(
+                    existingAccount,
+                    violations: new Violation[] {
+                        Violation.AccountAlreadyInitialized
+                    }
                 );
 
             var newAccount = new Account(
                 availableLimit: payload.AvailableLimit,
                 activeCard: payload.ActiveCard
             );
-            accountRepository.Save(newAccount);
 
-            return Task.FromResult(
-                new OperationResult(
-                    account: newAccount,
-                    violations: new Violation[] { }
-                )
+            await accountRepository.Save(newAccount);
+
+            return new OperationResult(
+                account: newAccount,
+                violations: new Violation[] { }
             );
         }
     }

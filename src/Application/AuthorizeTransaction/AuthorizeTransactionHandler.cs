@@ -25,18 +25,16 @@ namespace Authorizer.Application
             this.transactionService = transactionService;
         }
 
-        public Task<OperationResult> Handle(AuthorizeTransaction payload)
+        public async Task<OperationResult> Handle(AuthorizeTransaction payload)
         {
-            var account = accountRepository.Get();
+            var account = await accountRepository.Get();
 
             if (account == null)
-                return Task.FromResult(
-                    new OperationResult(
-                        account,
-                        violations: new Violation[] {
-                            Violation.AccountNotInitialized
-                        }
-                    )
+                return new OperationResult(
+                    account,
+                    violations: new Violation[] {
+                        Violation.AccountNotInitialized
+                    }
                 );
 
             var transaction = new Transaction(
@@ -48,22 +46,13 @@ namespace Authorizer.Application
             );
 
             if (violations.Any())
-                return Task.FromResult(
-                    new OperationResult(account, violations.ToArray())
-                );
+                return new OperationResult(account, violations.ToArray());
 
             var updatedAccount = account.Apply(transaction);
-            accountRepository.Save(updatedAccount);
-            transactionRepository.Save(transaction);
+            await accountRepository.Save(updatedAccount);
+            await transactionRepository.Save(transaction);
 
-            var op = new OperationResult(
-                account: new Account(payload.Amount, true),
-                violations: new Violation[] { }
-            );
-
-            return Task.FromResult(
-                new OperationResult(updatedAccount, violations.ToArray())
-            );
+            return new OperationResult(updatedAccount, violations.ToArray());
         }
     }
 }

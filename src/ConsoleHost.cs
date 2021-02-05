@@ -8,7 +8,7 @@ using Authorizer.Application;
 
 namespace Authorizer
 {
-    public class ConsoleService : IHostedService
+    public class ConsoleHost : IHostedService
     {
         private readonly IConsoleInterface console;
         private readonly JsonStringParser jsonParser;

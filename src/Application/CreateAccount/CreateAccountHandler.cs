@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Authorizer.Domain.Entities;
 using Authorizer.Domain.Enumerations;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Authorizer.Domain.Entities;
@@ -15,6 +16,16 @@ namespace Authorizer.Domain.Services
             this.transactionRepository = transactionRepository;
         }
 
+        private List<Transaction> GetPrecedingTransactions(
+            DateTime time,
+            int intervalInMinutes
+        )
+            => transactionRepository
+                .QueryByTimeWindow(
+                    from: time.AddMinutes(-intervalInMinutes),
+                    to: time
+                ).ToList();
+
         public IEnumerable<Violation> Authorize(
             Transaction transaction, Account account
         )
@@ -25,17 +36,18 @@ namespace Authorizer.Domain.Services
             if (transaction.Amount > account.AvailableLimit)
                 yield return Violation.InsufficientLimit;
 
-            var twoMinutesBefore = transaction.Time.AddMinutes(-2);
-            var precedingTransactions = transactionRepository
-                .QueryByTimeWindow(
-                    from: twoMinutesBefore, to: transaction.Time
-                ).ToList();
-
-            if (precedingTransactions.Count() >= 3)
-                yield return Violation.HighFrequencySmallInterval;
+            var precedingTransactions = GetPrecedingTransactions(
+                transaction.Time,
+                intervalInMinutes: 2
+            );
 
             if (precedingTransactions.Any(t => t.IsSimilarTo(transaction)))
                 yield return Violation.DoubledTransaction;
+
+            var highFrequencyTransactionCount = 3;
+
+            if (precedingTransactions.Count() >= highFrequencyTransactionCount)
+                yield return Violation.HighFrequencySmallInterval;
 
             yield break;
         }

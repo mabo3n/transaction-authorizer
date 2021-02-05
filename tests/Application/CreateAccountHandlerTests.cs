@@ -4,7 +4,6 @@ using Authorizer.Domain.Entities;
 using Authorizer.Infrastructure;
 using Authorizer.Domain.Enumerations;
 using Authorizer.Application;
-using Authorizer.Domain.Repositories;
 
 namespace AuthorizerTests.Application
 {

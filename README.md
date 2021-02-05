@@ -55,4 +55,4 @@ docker run -i --rm authorizer:latest < operations
 
 # Further information
 
-See `RADIONALE.md`.
+See `RATIONALE.md`.

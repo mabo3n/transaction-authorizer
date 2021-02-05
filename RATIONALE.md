@@ -25,7 +25,7 @@ The software is laid out in a component-based fashion, following an enterprise-l
 
 The Object-oriented paradigm was used, promoting composition over inheritance and making use of immutability when appropriate.
 
-Below is diagram sketch of the software layers and its dependencies:
+Below is a diagram sketch of the software layers and its dependencies:
 
 ```
 
@@ -52,7 +52,7 @@ The following is a list of short descriptions for each of these components:
 -   **Services**: responsible for handling specific business requirements not suited for a single domain entity.
 -   **Application**: responsible for providing the user-facing functionalities. The "use cases" of the software are incorporated here.
 -   **Api**: responsible for intefacing the software with the outer world.
--   **Host**: not a layer but the main component, the heart of the software that glues everything together and host the application.
+-   **Host**: not a layer but the top-most component that holds everything together and serves the software.
 
 It is worth noting that, given the present simplicity of the business requirements, it can be stated that the chosen architecture is an overkill. Nevertheless, the groundwork is laid for future features that shall emerge.
 
@@ -63,7 +63,7 @@ The relationship between an `Account` and a `Transaction` was not completely cle
 
 # Test strategy
 
-The software relies mostly on entities/services tests and a full integration test to guarantee business requirements. Tests on the application (use cases) layer are more focused to that the underlying components are linked and communicating correctly.
+The software relies mostly on entities/services tests and a full integration/snapshot test to guarantee that business requirements are met. Tests on the application (use cases) layer are more focused on assuring that the underlying components are linked and communicating properly.
 
 The infrastructure and api layers' components were not tested directly, since they exist only to supply other components and, for the time being, are not shared with other modules.
 

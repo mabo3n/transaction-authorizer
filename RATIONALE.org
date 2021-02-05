@@ -1,0 +1,50 @@
+* Technology stack
+  The software was built with .NET 5.0 in the C# language, mostly due to the author's familiarity with the platform. The use of "hand-written" code was favored over external libraries and frameworks, but some external packages were included:
+
+  - [[https://www.nuget.org/packages/Microsoft.Extensions.Hosting][Microsoft.Extensions.Hosting]]: Microsoft's utility to make it easier to set up and host an application with its dependencies.
+  - [[https://fluentassertions.com/][FluentAssertions]]: a library that make use of C#'s extension methods to allow you to write much more readable tests.
+  - [[https://xunit.net/][xUnit]]: Chosen test runner.
+
+* Architectural decisions
+  The software is laid out in a componentized fashion, following an enterprise-like architecture. There are layers that resemble a domain-driven approach, each one with a designated responsibility.
+
+  Below is diagram sketch of the layers and its dependencies:
+
+  #+begin_src
+
+                       +---------+                    +--------+
+        +--------+     |         |------------------->|        |
+        |        |     |         |                    |        |
+        |        |     | Applica |    +----------+    |        |
+        |  Host  |     | tion    |    |          |    | Domain |
+        |        |---->|         |--->| Services |--->|        |
+        |        |     |         |    |          |    |        |
+        +--------+     +---------+    +----------+    +--------+
+            |              |               |              ^
+            v              v               v              |
+        +--------+     +---------------------------------------+
+        |  Api   |     |             Infrastructure            |
+        +--------+     +---------------------------------------+
+
+  #+end_src
+
+  The following is a short description of the responsibilities of this components
+
+  - *Infrastructure*: responsible for interacting with the data persistence system and providing query-like functionality to other components.
+  - *Domain*: responsible for incorporating the core business concepts and its invariant rules.
+  - *Services*: responsible for handling specific business requirements not suited for a single domain entity.
+  - *Application*: responsible for providing the user-facing functionalities. The "use cases" of the software are incorporated here.
+  - *Api*: responsible for intefacing the software with the outer world.
+  - *Host*: not a layer but the main component, the heart of the software that glues everything together and host the application.
+
+  verbosity
+  Given the opportunity immutaiblity
+
+
+  Full component made possible that basically
+
+* Test strategy
+  asddasasdasdasdasdasdasdasasdasdasdasasdasd
+  -
+** Conventions
+   asdasdasdasdasd

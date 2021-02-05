@@ -48,7 +48,7 @@
   
   Tests on the application (use cases) layer mostly assert that the underlying components are linked and communicating correctly.
   
-  Tests for the Infrastructure and Api layers' components were not provided, since they exist only to supply other components and, for the time being, are not shared with other modules.
+  Tests for the infrastructure and api layers' components were not provided, since they exist only to supply other components and, for the time being, are not shared with other modules.
   
 ** Adopted convention
    Tests aim to be short and to provide a single, specific guarantee, rather than asserting multiple things at once. This approach depends heavily on well-suited, general-purpose test setup helpers to avoid repetitive test arrangements in several places, but provides easy and concise test maintainability. One can guess test expectations just by looking at their signature, and they always break for a single reason.
@@ -59,6 +59,4 @@ The following naming convention was used:
      <ComponentName>Tests.<FunctionName>_Should<ExpectedBehavior>[_When<Predicate>]
    #+end_src
  
-Being that the predicate part is ommited the tests asserts for the most common, error-free scenario.
-   
-   
+Being that the predicate part is ommited for the tests asserts for the most common, error-free scenario.

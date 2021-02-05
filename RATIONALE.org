@@ -1,5 +1,5 @@
 * Technology stack
-  The software was built with .NET 5.0 in the C# language, mainly due to the author's familiarity with the platform. The use of "self-authored" code was favored over external libraries and frameworks, but some external packages were included:
+  The software was built with .NET 5.0 and the C# language, mainly due to the author's familiarity with the platform. The use of "self-authored" code was favored over external libraries and frameworks, but some external packages were included:
 
   - [[https://www.nuget.org/packages/Microsoft.Extensions.Hosting][Microsoft.Extensions.Hosting]]: Microsoft's utility to make it easier to set up and host an application with injected dependencies.
   - [[https://fluentassertions.com/][FluentAssertions]]: a library that make use of C#'s extension methods to allow you to write much more readable tests.
@@ -41,14 +41,12 @@
 
   It is worth noting that, given the present simplicity of the business requirements, it can be stated that the chosen architecture is an overkill. Nevertheless, the groundwork is laid for future features that shall emerge.
   
-  Also, the relationship between an =Account= and a =Transaction= was not completely clear to the author and, as immutability was favored over state changes, these entities became more like data-holder objects, the so-called "anemic" domain model. The =TransactionService= exists and validates transactions himself for this reason.
+  The relationship between an =Account= and a =Transaction= was not completely clear to the author, and as immutability was favored over state changes, these entities became more like data-holder objects, heading towards the so-called "anemic" domain model. A =TransactionService= was created to enforce the main business rules validations, not suited to any of the particular entities.
 
 * Test strategy
-  The software relies heavily on entities/services tests and integration tests to guarantee business requirements. The componentized approach allows wide-ranging, high fidelity integration tests.
+  The software relies mostly on entities/services tests and a full integration test to guarantee business requirements. Tests on the application (use cases) layer are more focused to that the underlying components are linked and communicating correctly.
   
-  Tests on the application (use cases) layer mostly assert that the underlying components are linked and communicating correctly.
-  
-  Tests for the infrastructure and api layers' components were not provided, since they exist only to supply other components and, for the time being, are not shared with other modules.
+  The infrastructure and api layers' components were not tested directly, since they exist only to supply other components and, for the time being, are not shared with other modules.
   
 ** Adopted convention
    Tests aim to be short and to provide a single, specific guarantee, rather than asserting multiple things at once. This approach depends heavily on well-suited, general-purpose test setup helpers to avoid repetitive test arrangements in several places, but provides easy and concise test maintainability. One can guess test expectations just by looking at their signature, and they always break for a single reason.

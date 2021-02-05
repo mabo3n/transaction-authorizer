@@ -42,8 +42,8 @@ namespace Authorizer
                 "transaction" => await authorizeTransactionHandler.Handle(
                     As<AuthorizeTransaction>(payload)
                 ),
-                _ => throw new Exception(
-                    $"Unrecognizable operation {operationName}"
+                _ => throw new InvalidOperationException(
+                    $"Unrecognizable operation \"{operationName}\""
                 ),
             };
 

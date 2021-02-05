@@ -24,10 +24,10 @@ namespace Authorizer
             this.authorizeTransactionHandler = authorizeTransactionHandler;
         }
 
+        T As<T>(string payload) => jsonParser.Parse<T>(payload);
 
         private async Task<string> Resolve(string input)
         {
-            T As<T>(string payload) => jsonParser.Parse<T>(payload);
             var (operationName, payload) = jsonParser.GetRootAttribute(input);
 
             var operationResult = operationName switch

@@ -1,14 +1,16 @@
 * Technology stack
-  The software was built with .NET 5.0 in the C# language, mostly due to the author's familiarity with the platform. The use of "hand-written" code was favored over external libraries and frameworks, but some external packages were included:
+  The software was built with .NET 5.0 in the C# language, mainly due to the author's familiarity with the platform. The use of "self-authored" code was favored over external libraries and frameworks, but some external packages were included:
 
-  - [[https://www.nuget.org/packages/Microsoft.Extensions.Hosting][Microsoft.Extensions.Hosting]]: Microsoft's utility to make it easier to set up and host an application with its dependencies.
+  - [[https://www.nuget.org/packages/Microsoft.Extensions.Hosting][Microsoft.Extensions.Hosting]]: Microsoft's utility to make it easier to set up and host an application with injected dependencies.
   - [[https://fluentassertions.com/][FluentAssertions]]: a library that make use of C#'s extension methods to allow you to write much more readable tests.
   - [[https://xunit.net/][xUnit]]: Chosen test runner.
 
 * Architectural decisions
-  The software is laid out in a componentized fashion, following an enterprise-like architecture. There are layers that resemble a domain-driven approach, each one with a designated responsibility.
+  The software is laid out in a component-based fashion, following an enterprise-like architecture. There are layers that resemble a domain-driven approach, each one with a designated responsibility.
 
-  Below is diagram sketch of the layers and its dependencies:
+  The Object-oriented paradigm was used, promoting composition over inheritance and making use of immutability when appropriate.
+
+  Below is diagram sketch of the software layers and its dependencies:
 
   #+begin_src
 
@@ -28,7 +30,7 @@
 
   #+end_src
 
-  The following is a short description of the responsibilities of this components
+  The following is a list of short descriptions for each of these components:
 
   - *Infrastructure*: responsible for interacting with the data persistence system and providing query-like functionality to other components.
   - *Domain*: responsible for incorporating the core business concepts and its invariant rules.
@@ -37,14 +39,26 @@
   - *Api*: responsible for intefacing the software with the outer world.
   - *Host*: not a layer but the main component, the heart of the software that glues everything together and host the application.
 
-  verbosity
-  Given the opportunity immutaiblity
-
-
-  Full component made possible that basically
+  It is worth noting that, given the present simplicity of the business requirements, it can be stated that the chosen architecture is an overkill. Nevertheless, the groundwork is laid for future features that shall emerge.
+  
+  Also, the relationship between an =Account= and a =Transaction= was not completely clear to the author and, as immutability was favored over state changes, these entities became more like data-holder objects, the so-called "anemic" domain model. The =TransactionService= exists and validates transactions himself for this reason.
 
 * Test strategy
-  asddasasdasdasdasdasdasdasasdasdasdasasdasd
-  -
-** Conventions
-   asdasdasdasdasd
+  The software relies heavily on entities/services tests and integration tests to guarantee business requirements. The componentized approach allows wide-ranging, high fidelity integration tests.
+  
+  Tests on the application (use cases) layer mostly assert that the underlying components are linked and communicating correctly.
+  
+  Tests for the Infrastructure and Api layers' components were not provided, since they exist only to supply other components and, for the time being, are not shared with other modules.
+  
+** Adopted convention
+   Tests aim to be short and to provide a single, specific guarantee, rather than asserting multiple things at once. This approach depends heavily on well-suited, general-purpose test setup helpers to avoid repetitive test arrangements in several places, but provides easy and concise test maintainability. One can guess test expectations just by looking at their signature, and they always break for a single reason.
+
+The following naming convention was used:
+   
+   #+begin_src 
+     <ComponentName>Tests.<FunctionName>_Should<ExpectedBehavior>[_When<Predicate>]
+   #+end_src
+ 
+Being that the predicate part is ommited the tests asserts for the most common, error-free scenario.
+   
+   

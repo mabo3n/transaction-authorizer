@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Authorizer.Api;
 using Authorizer.Domain.Repositories;
@@ -13,9 +14,9 @@ namespace Authorizer
         private static void Main(string[] args)
         {
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(
-                    logging => logging.ClearProviders()
-                )
+                .ConfigureLogging(logging => {
+                    logging.ClearProviders();
+                })
                 .ConfigureServices(services => {
                     // Infra
                     services.AddScoped<IDataSource, InMemoryDataSource>();

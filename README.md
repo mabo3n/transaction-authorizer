@@ -13,7 +13,7 @@
 
 A tiny command line application to authorize financial transactions on an account.
 
-The application listens for json-formatted operations in the standard input, and outputs the results to the standard output. For a complete specification of the features and business rules, please refer to Nubank's **Code Challenge: Authorizer** document.
+It listens for json-formatted operations in the standard input, and outputs the results to the standard output.
 
 
 <a id="org678f369"></a>
